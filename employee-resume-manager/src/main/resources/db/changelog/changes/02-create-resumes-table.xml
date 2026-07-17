@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="140726-2" author="dogan">
+        <createTable tableName="resumes">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="employee_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_resumes_employee"
+                             references="employees(id)"/>
+            </column>
+            <column name="original_file_name" type="VARCHAR(255)"/>
+            <column name="storage_key" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_type" type="VARCHAR(100)"/>
+            <column name="file_size_bytes" type="BIGINT"/>
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="parsed_text" type="TEXT"/>
+            <column name="uploaded_at" type="TIMESTAMP"/>
+            <column name="processed_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

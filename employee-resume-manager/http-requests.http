@@ -1,0 +1,127 @@
+### =============================================
+### EMPLOYEE ENDPOINTS
+### =============================================
+
+### Çalışan Listesi
+GET http://localhost:8080/employees
+Accept: text/html
+
+###
+
+### Yeni Çalışan Formu
+GET http://localhost:8080/employees/new
+Accept: text/html
+
+###
+
+### Yeni Çalışan Oluştur (CV olmadan)
+POST http://localhost:8080/employees
+Content-Type: application/x-www-form-urlencoded
+
+firstName=Ahmet&lastName=Yılmaz&email=ahmet.yilmaz@sirket.com&department=Yazılım&position=Backend Developer&hireDate=2024-01-15
+
+###
+
+### Yeni Çalışan Oluştur (CV ile birlikte)
+POST http://localhost:8080/employees
+Content-Type: multipart/form-data; boundary=----FormBoundary
+
+------FormBoundary
+Content-Disposition: form-data; name="firstName"
+
+Mehmet
+------FormBoundary
+Content-Disposition: form-data; name="lastName"
+
+Kaya
+------FormBoundary
+Content-Disposition: form-data; name="email"
+
+mehmet.kaya@sirket.com
+------FormBoundary
+Content-Disposition: form-data; name="department"
+
+İnsan Kaynakları
+------FormBoundary
+Content-Disposition: form-data; name="position"
+
+İK Uzmanı
+------FormBoundary
+Content-Disposition: form-data; name="hireDate"
+
+2024-03-01
+------FormBoundary
+Content-Disposition: form-data; name="resumeFile"; filename="mehmet-cv.pdf"
+Content-Type: application/pdf
+
+< ./test-files/sample-cv.pdf
+------FormBoundary--
+
+###
+
+### Çalışan Detayı (id=1)
+GET http://localhost:8080/employees/1
+Accept: text/html
+
+###
+
+### Çalışan Düzenleme Formu (id=1)
+GET http://localhost:8080/employees/1/edit
+Accept: text/html
+
+###
+
+### Çalışan Güncelle (id=1)
+POST http://localhost:8080/employees/1
+Content-Type: application/x-www-form-urlencoded
+
+firstName=Ahmet&lastName=Yılmaz&email=ahmet.updated@sirket.com&department=DevOps&position=Senior Developer&hireDate=2024-01-15
+
+###
+
+### Çalışan Sil (id=1)
+POST http://localhost:8080/employees/1/delete
+
+###
+
+### =============================================
+### RESUME (CV) ENDPOINTS
+### =============================================
+
+### Tüm CV Listesi
+GET http://localhost:8080/resumes
+Accept: text/html
+
+###
+
+### Çalışana Ait CV Listesi (employeeId=1)
+GET http://localhost:8080/employees/1/resumes
+Accept: text/html
+
+###
+
+### CV Yükle (employeeId=1)
+POST http://localhost:8080/employees/1/resumes/upload
+Content-Type: multipart/form-data; boundary=----CVBoundary
+
+------CVBoundary
+Content-Disposition: form-data; name="file"; filename="test-cv.pdf"
+Content-Type: application/pdf
+
+< ./test-files/sample-cv.pdf
+------CVBoundary--
+
+###
+
+### CV İndir (resumeId=1)
+GET http://localhost:8080/resumes/1/download
+
+###
+
+### CV Sil (resumeId=1, employeeId ile redirect)
+POST http://localhost:8080/resumes/1/delete
+Content-Type: application/x-www-form-urlencoded
+
+employeeId=1
+
+###
