@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Çalışan Listesi')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h1>👥 Çalışan Listesi</h1>
+            <a th:href="@{/employees/new}" class="btn btn-primary">+ Yeni Çalışan Ekle</a>
+        </div>
+
+
+        <div th:if="${!employees.isEmpty()}">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>E-posta</th>
+                    <th>Departman</th>
+                    <th>Pozisyon</th>
+                    <th>İşe Başlama</th>
+                    <th>İşlemler</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="emp : ${employees}">
+                    <td th:text="${emp.id}"></td>
+                    <td th:text="${emp.firstName}"></td>
+                    <td th:text="${emp.lastName}"></td>
+                    <td th:text="${emp.email}"></td>
+                    <td th:text="${emp.department}"></td>
+                    <td th:text="${emp.position}"></td>
+                    <td th:text="${emp.hireDate}"></td>
+                    <td class="actions">
+                        <a th:href="@{/employees/{id}(id=${emp.id})}" class="btn btn-info btn-sm">Detay</a>
+                        <a th:href="@{/employees/{id}/edit(id=${emp.id})}" class="btn btn-success btn-sm">Düzenle</a>
+                        <form th:action="@{/employees/{id}/delete(id=${emp.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Bu çalışanı silmek istediğinizden emin misiniz?')">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div th:if="${employees.isEmpty()}" class="empty-state">
+            <h2>🔍</h2>
+            <p>Henüz kayıtlı çalışan bulunmuyor.</p>
+            <a th:href="@{/employees/new}" class="btn btn-primary" style="margin-top: 1rem;">İlk Çalışanı Ekle</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
