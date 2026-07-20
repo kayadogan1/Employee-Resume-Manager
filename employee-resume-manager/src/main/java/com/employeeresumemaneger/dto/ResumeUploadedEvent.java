@@ -11,5 +11,7 @@ public class ResumeUploadedEvent {
     private Long candidateId;
     private String extractedText;
     private String storageKey;
-
+    private String originalFileName;
+    private String contentType;
+    private Long fileSizeBytes;
 }

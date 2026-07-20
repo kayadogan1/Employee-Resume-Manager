@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: Dogan
+      changes:
+        - createTable:
+            tableName: candidates
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGSERIAL"
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: "first_name"
+                  type: "VARCHAR(100)"
+              - column:
+                  name: "last_name"
+                  type: "VARCHAR(100)"
+              - column:
+                  name: "email"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: "linkedin_url"
+                  type: "VARCHAR(100)"
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: "motivation_message"
+                  type: "TEXT"
+              - column:
+                  name: "cv_name"
+                  type: "VARCHAR(255)"
+              - column:
+                  name: "created_at"
+                  type: "TIMESTAMP"
+                  defaultValueComputed: "CURRENT_TIMESTAMP"

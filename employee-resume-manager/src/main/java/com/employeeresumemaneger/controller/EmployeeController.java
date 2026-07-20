@@ -74,7 +74,7 @@ public class EmployeeController {
             candidateRepository.save(candidate);
             rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_NAME, RabbitMqConfig.ROUTING_KEY,
                     ResumeUploadedEvent.builder()
-                            .candidate(candidate)
+                            .candidateId(candidate.getId())
                             .extractedText(extractedText)
                             .build());
 
@@ -105,8 +105,6 @@ public class EmployeeController {
                         .formatted(saved.getId(), System.currentTimeMillis(), resumeFile.getOriginalFilename());
 
                 minioService.upload(resumeFile, storageKey);
-                resumeService.uploadAndNotify(saved.getId(), resumeFile.getOriginalFilename(),
-                        storageKey, resumeFile.getContentType(), resumeFile.getSize());
 
                 redirectAttributes.addFlashAttribute("successMessage",
                         "Çalışan ve CV başarıyla kaydedildi! CV işleme kuyruğuna eklendi.");
@@ -127,9 +125,6 @@ public class EmployeeController {
         log.info("[EMPLOYEE-CONTROLLER] GET /employees/{} -> Çalışan detayı istendi", id);
         Employee employee = employeeService.findById(id);
         model.addAttribute("employee", employee);
-        log.info("[EMPLOYEE-CONTROLLER] Çalışan detayı gösteriliyor: {} {}, CV sayısı: {}",
-                employee.getFirstName(), employee.getLastName(),
-                employee.getResumes() != null ? employee.getResumes().size() : 0);
         return "employee/detail";
     }
 

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: Dogan
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: "candidate_id"
+                  type: "BIGINT"
+                  constraints:
+                    foreignKeyName: "fk_resumes_candidate"
+                    references: "candidates(id)"

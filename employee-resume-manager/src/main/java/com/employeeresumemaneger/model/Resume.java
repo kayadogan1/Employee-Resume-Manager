@@ -20,11 +20,6 @@ public class Resume {
     private Long id;
 
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id",nullable = false)
     private Candidate candidate;

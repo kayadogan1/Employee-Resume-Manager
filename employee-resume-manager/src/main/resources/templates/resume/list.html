@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('CV Listesi')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h1>📁 Tüm CV'ler</h1>
+            <a th:href="@{/employees}" class="btn btn-info">← Çalışanlara Dön</a>
+        </div>
+
+        <div th:if="${!resumes.isEmpty()}">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Aday</th>
+                    <th>Dosya Adı</th>
+                    <th>Tür</th>
+                    <th>Boyut</th>
+                    <th>Durum</th>
+                    <th>Yükleme Tarihi</th>
+                    <th>İşlemler</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="resume : ${resumes}">
+                    <td th:text="${resume.id}"></td>
+                    <td>
+                        <span th:if="${resume.candidate != null}">
+                            <a th:href="@{/candidate/{id}(id=${resume.candidate.id})}"
+                               th:text="${resume.candidate.name + ' ' + resume.candidate.lastName}"
+                               style="color: #667eea; text-decoration: none; font-weight: 600;"></a>
+                        </span>
+                        <span th:if="${resume.candidate == null}">-</span>
+                    </td>
+                    <td th:text="${resume.originalFileName}"></td>
+                    <td th:text="${resume.parsedText}"></td>
+
+                    <td th:text="${resume.contentType}"></td>
+                    <td>
+                        <span th:if="${resume.fileSizeBytes != null}"
+                              th:text="${#numbers.formatDecimal(resume.fileSizeBytes / 1024.0, 1, 1) + ' KB'}"></span>
+                        <span th:if="${resume.fileSizeBytes == null}">-</span>
+                    </td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${resume.status.name() == 'UPLOADED'} ? 'badge-uploaded' :
+                                              (${resume.status.name() == 'PROCESSING'} ? 'badge-processing' :
+                                              (${resume.status.name() == 'PROCESSED'} ? 'badge-processed' : 'badge-failed'))"
+                              th:text="${resume.status}"></span>
+                    </td>
+                    <td th:text="${#temporals.format(resume.uploadedAt, 'dd.MM.yyyy HH:mm')}"></td>
+                    <td class="actions">
+                        <a th:href="@{/resumes/{id}/download(id=${resume.id})}" class="btn btn-info btn-sm">⬇ İndir</a>
+                        <form th:action="@{/resumes/{id}/delete(id=${resume.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Bu CV\'yi silmek istediğinizden emin misiniz?')">🗑 Sil</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${resumes.isEmpty()}" class="empty-state">
+            <h2>📭</h2>
+            <p>Henüz yüklenmiş CV bulunmuyor.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

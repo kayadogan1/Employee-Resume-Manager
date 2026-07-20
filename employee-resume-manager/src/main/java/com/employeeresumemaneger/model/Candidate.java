@@ -15,9 +15,11 @@ public class Candidate {
     @Id
     private Long Id;
     private String name;
-    private String surname;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "email",unique = true,nullable = false)
     private String email;
-    @Column(name = "linkedin_url")
+    @Column(name = "linkedin_url",unique = true,nullable = false)
     private String linkedinUrl;
     @Column(name = "motivation_message")
     private String motivationMessage;

@@ -36,10 +36,6 @@ public class Employee {
     @Column(name = "hire_date")
     private LocalDate hireDate;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Resume> resumes = new ArrayList<>();
-
     @Column(name = "created_at")
     private Instant createdAt;
 

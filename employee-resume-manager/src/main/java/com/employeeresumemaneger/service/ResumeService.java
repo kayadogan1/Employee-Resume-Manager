@@ -21,15 +21,7 @@ public class ResumeService {
 
     private final ResumeRepository resumeRepository;
     private final MinioService minioService;
-    private final EmployeeService employeeService;
-    private final RabbitTemplate rabbitTemplate;
 
-    public List<Resume> findByEmployeeId(Long employeeId) {
-        log.info("[RESUME-SERVICE] Çalışana ait CV'ler listeleniyor -> employeeId: {}", employeeId);
-        List<Resume> resumes = resumeRepository.findByEmployeeId(employeeId);
-        log.info("[RESUME-SERVICE] {} adet CV bulundu -> employeeId: {}", resumes.size(), employeeId);
-        return resumes;
-    }
 
     public Resume findById(Long id) {
         log.info("[RESUME-SERVICE] CV aranıyor -> id: {}", id);

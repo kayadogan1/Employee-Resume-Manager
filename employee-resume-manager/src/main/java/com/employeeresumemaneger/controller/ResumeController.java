@@ -33,27 +33,23 @@ public class ResumeController {
     private final MinioService minioService;
     private final CandidateRepository candidateRepository;
     private final RabbitTemplate rabbitTemplate;
-    private PdfService pdfService;
+    private final PdfService pdfService;
 
     @GetMapping("/resumes")
     public String listAllResumes(Model model) {
         log.info("[RESUME-CONTROLLER] GET /resumes -> Tüm CV listesi istendi");
         List<Resume> resumes = resumeService.findAll();
+
         model.addAttribute("resumes", resumes);
         log.info("[RESUME-CONTROLLER] {} adet CV listeleniyor", resumes.size());
         return "resume/list";
     }
-
-    @GetMapping("/employees/{empId}/resumes")
-    public String listEmployeeResumes(@PathVariable Long empId, Model model) {
-        log.info("[RESUME-CONTROLLER] GET /employees/{}/resumes -> Çalışana ait CV'ler istendi", empId);
-        List<Resume> resumes = resumeService.findByEmployeeId(empId);
-        model.addAttribute("resumes", resumes);
-        model.addAttribute("employeeId", empId);
-        log.info("[RESUME-CONTROLLER] {} adet CV listeleniyor -> employeeId: {}", resumes.size(), empId);
-        return "resume/list";
+    @GetMapping("/upload")
+    public String uploadResumeForm(Model model) {
+        log.info("[RESUME-CONTROLLER] GET /upload -> Yukleme formu gosteriliyor");
+        model.addAttribute("candidate", new Candidate());
+        return "resume/createResume";  // templates/resume/upload.html
     }
-
     @PostMapping("/upload")
     public String uploadResumeFile(@ModelAttribute Candidate candidate,
                                    @RequestParam("resumeFile") MultipartFile file,
@@ -79,10 +75,13 @@ public class ResumeController {
                             .candidateId(candidate.getId())
                             .extractedText(extractedText)
                             .storageKey(storageKey)
+                            .originalFileName(file.getOriginalFilename())
+                            .contentType(file.getContentType())
+                            .fileSizeBytes(file.getSize())
                             .build());
 
             redirectAttributes.addFlashAttribute("info", "Basvurunuz basariyla alinmistir");
-            return "redirect:/list";
+            return "redirect:/upload";
 
         } catch (Exception exception) {
             log.error("Yukleme sirasinda hata olustu: {}", exception.getMessage(), exception);
